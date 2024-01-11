@@ -125,7 +125,7 @@ console.log([...arr, ...arr2]);
 //reslt will be string with a seperater passes as an argument
 console.log(letters.join('-'));
 
-*/
+
 
 ///+++++++++++++THE NEW AT METHOD++++++++
 const arr = [23, 11, 64];
@@ -183,6 +183,7 @@ currencies.forEach(function (value, key, map) {
 //forEach() method for set
 const currenciesUnique = new Set(['USD', 'GBP', 'USD', 'EUR', 'EUR']);
 console.log(currenciesUnique);
-currenciesUnique.forEach(function (value, key, set) {
-  console.log(`${key}:${value}`);
+currenciesUnique.forEach(function (value, valueAlso, set) {
+  console.log(`${valueAlso}:${value}`);
 });
+*/
