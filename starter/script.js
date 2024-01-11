@@ -65,16 +65,17 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 // LECTURES
 
-const currencies = new Map([
-  ['USD', 'United States dollar'],
-  ['EUR', 'Euro'],
-  ['GBP', 'Pound sterling'],
-]);
+// const currencies = new Map([
+//   ['USD', 'United States dollar'],
+//   ['EUR', 'Euro'],
+//   ['GBP', 'Pound sterling'],
+// ]);
 
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
 
+/*
 ///+++++++++++++++SLICE()++++++++++++++++++///
 let arr = ['a', 'b', 'c', 'd', 'e'];
 //slice(includes,not includes)
@@ -124,4 +125,64 @@ console.log([...arr, ...arr2]);
 //reslt will be string with a seperater passes as an argument
 console.log(letters.join('-'));
 
+*/
 
+///+++++++++++++THE NEW AT METHOD++++++++
+const arr = [23, 11, 64];
+console.log(arr[0]);
+console.log(arr.at(0));
+
+//to get last element
+console.log(arr[arr.length - 1]);
+console.log(arr.at(arr.length - 1));
+console.log(arr.slice(-1)[0]);
+console.log(arr.at(-1));
+console.log(arr.at(-2));
+console.log(arr.at(-3));
+console.log(arr.at(0));
+//at works on string
+console.log('jonas'.at(0));
+console.log('jonas'.at(-1));
+
+///+++++++++++++FOREACH METHOD+++++++++++++++
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+//looping
+// for (const movement of movements) {
+for (const [i, movement] of movements.entries()) {
+  if (movement > 0) {
+    console.log(`Movement ${i + 1}:You Deposited ${movement}`);
+  } else {
+    console.log(`Movement ${i + 1}: You withdrew ${Math.abs(movement)}`);
+  }
+}
+//same thing with forEach
+movements.forEach(function (movement, index, array) {
+  // console.log(array)gives the array on which we using method
+  if (movement > 0) {
+    console.log(`Movement ${index}:You Deposited ${movement}`);
+  } else {
+    console.log(`Movement ${index}:You withdrew ${Math.abs(movement)}`);
+  }
+});
+
+//0:function(200)
+//1:function(450)
+//2:function(400)
+//3 ...
+//forEach() with map
+const currencies = new Map([
+  ['USD', 'United States dollar'],
+  ['EUR', 'Euro'],
+  ['GBP', 'Pound sterling'],
+]);
+console.log(currencies);
+currencies.forEach(function (value, key, map) {
+  console.log(`${key}:${value}`);
+  // console.log(map)
+});
+//forEach() method for set
+const currenciesUnique = new Set(['USD', 'GBP', 'USD', 'EUR', 'EUR']);
+console.log(currenciesUnique);
+currenciesUnique.forEach(function (value, key, set) {
+  console.log(`${key}:${value}`);
+});
