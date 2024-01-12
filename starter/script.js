@@ -61,7 +61,21 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+//creating username
+const createUserNames = function (accs) {
+  accs.forEach(function (acc) {
+    acc.userName = acc.owner
+      .toLowerCase()
+      .split(' ')
+      .map(ele => ele.at(0))
+      .join('');
+  });
+};
+createUserNames(accounts);
+
+//adding html text dynamically using html
 const displayMovements = function (movements) {
+  containerMovements.innerHTML = '';
   movements.forEach(function (mov, index) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
     const html = `
@@ -77,8 +91,35 @@ const displayMovements = function (movements) {
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
-
 displayMovements(account1.movements);
+
+//Displaybalance
+const calcDisplayBalance = function (movements) {
+  const balance = movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${balance} £`;
+  console.log(balance);
+};
+calcDisplayBalance(account1.movements);
+
+//displaySummary
+const calcDisplaySummary = function (movements) {
+  const income = movements
+    .filter(mov => mov > 0)
+    .reduce((acc, mov) => acc + mov);
+  labelSumIn.textContent = `${income} £`;
+
+  const out = movements
+    .filter(mov => mov < 0)
+    .reduce((acc, curr) => acc + curr);
+  labelSumOut.textContent = `${Math.abs(out)} £`;
+
+  const interest = movements
+    .filter(mov => mov > 0)
+    .map(deposit => deposit * (1.2 / 100))
+    .reduce((acc, int) => acc + int, 0);
+  labelSumInterest.textContent = `${interest} £`;
+};
+calcDisplaySummary(account1.movements);
 
 ///////////////////////////////////////
 // Coding Challenge #1
@@ -125,6 +166,32 @@ function checkDogs(dogJulia, dogsKate) {
   });
 }
 checkDogs([3, 5, 2, 12, 7], [4, 1, 15, 8, 3]);
+*/
+
+
+
+///////////////////////////////////////
+// Coding Challenge #2
+
+/* 
+Let's go back to Julia and Kate's study about dogs. This time, they want to convert dog ages 
+to human ages and calculate the average age of the dogs in their study.
+
+Create a function 'calcAverageHumanAge', which accepts an arrays of dog's ages ('ages'), 
+and does the following things in order:
+
+1. Calculate the dog age in human years using the following formula: if the dog is <= 2 years old,
+ humanAge = 2 * dogAge. If the dog is > 2 years old, humanAge = 16 + dogAge * 4.
+2. Exclude all dogs that are less than 18 human years old 
+(which is the same as keeping dogs that are at least 18 years old)
+3. Calculate the average human age of all adult dogs 
+(you should already know from other challenges how we calculate averages 😉)
+4. Run the function for both test datasets
+
+TEST DATA 1: [5, 2, 4, 1, 15, 8, 3]
+TEST DATA 2: [16, 6, 10, 5, 6, 1, 4]
+
+GOOD LUCK 😀
 */
 
 /////////////////////////////////////////////////
@@ -257,6 +324,7 @@ currenciesUnique.forEach(function (value, valueAlso, set) {
 ///+++++++++++++++DATA TRANSFORMERS+++++++++++++++++++
 //MAP,FILTER,REDUCE
 
+/*
 //++++++++++++++MAP+++++++++++++++
 const eurToUsd = 1.1;
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
@@ -287,4 +355,55 @@ const movementsDescription = movements.map((mov, i) => {
 });
 console.log(movementsDescription);
 
+///++++++++++++FILTER METHOD+++++++++++++
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
+const deposits = movements.filter(function (mov) {
+  return mov > 0;
+});
+console.log(deposits);
+console.log(movements);
+
+const depositsFor = [];
+for (const mov of movements)
+  if (mov > 0) {
+    depositsFor.push(mov);
+  }
+console.log(depositsFor);
+
+const withdrawals = movements.filter((mov, i, arr) => mov < 0);
+console.log(withdrawals);
+
+///+++++++++++++++++REDUCE METHOD++++++++++++++++++++++++++++
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+//accumulator is like a snowball
+const balanceo = movements.reduce(function (acc, cur, i, arr) {
+  console.log(`Iteration ${i} ${acc}`);
+  return acc + cur;
+}, 0);
+console.log(balanceo);
+//arrow fun
+const balance = movements.reduce((acc, curr) => acc + curr);
+console.log(balance);
+//same using for loop
+let sum = 0;
+for (const mov of movements) {
+  sum += mov;
+}
+console.log(sum);
+
+*/
+
+//CHAINING METHOD
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+const eurToUsd = 1.1;
+
+//PIPELINE
+const totalDespositedUSD = movements
+  .filter(mov => mov > 0)
+  .map((mov, i, arr) => {
+    // console.log(arr);
+    mov * eurToUsd;
+  })
+  .reduce((acc, ele, i, arr) => acc + ele);
+// console.log(totalDespositedUSD);
