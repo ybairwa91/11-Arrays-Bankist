@@ -6,28 +6,28 @@
 
 // Data
 const account1 = {
-  owner: 'Jonas Schmedtmann',
+  owner: 'Jayash Sharma',
   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
   interestRate: 1.2, // %
   pin: 1111,
 };
 
 const account2 = {
-  owner: 'Jessica Davis',
+  owner: 'Jennifer Devi',
   movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
   interestRate: 1.5,
   pin: 2222,
 };
 
 const account3 = {
-  owner: 'Steven Thomas Williams',
+  owner: 'Salman The Warrior',
   movements: [200, -200, 340, -300, -20, 50, 400, -460],
   interestRate: 0.7,
   pin: 3333,
 };
 
 const account4 = {
-  owner: 'Sarah Smith',
+  owner: 'Sara Sharma',
   movements: [430, 1000, 700, 50, 90],
   interestRate: 1,
   pin: 4444,
@@ -53,7 +53,7 @@ const btnLoan = document.querySelector('.form__btn--loan');
 const btnClose = document.querySelector('.form__btn--close');
 const btnSort = document.querySelector('.btn--sort');
 
-const inputLoginUsername = document.querySelector('.login__input--user');
+let inputLoginUsername = document.querySelector('.login__input--user');
 const inputLoginPin = document.querySelector('.login__input--pin');
 const inputTransferTo = document.querySelector('.form__input--to');
 const inputTransferAmount = document.querySelector('.form__input--amount');
@@ -91,7 +91,6 @@ const displayMovements = function (movements) {
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
-displayMovements(account1.movements);
 
 //Displaybalance
 const calcDisplayBalance = function (movements) {
@@ -99,27 +98,57 @@ const calcDisplayBalance = function (movements) {
   labelBalance.textContent = `${balance} £`;
   console.log(balance);
 };
-calcDisplayBalance(account1.movements);
 
 //displaySummary
-const calcDisplaySummary = function (movements) {
-  const income = movements
+const calcDisplaySummary = function (acc) {
+  const income = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov);
   labelSumIn.textContent = `${income} £`;
 
-  const out = movements
+  const out = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, curr) => acc + curr);
   labelSumOut.textContent = `${Math.abs(out)} £`;
 
-  const interest = movements
+  const interest = acc.movements
     .filter(mov => mov > 0)
     .map(deposit => deposit * (1.2 / 100))
     .reduce((acc, int) => acc + int, 0);
   labelSumInterest.textContent = `${interest} £`;
 };
-calcDisplaySummary(account1.movements);
+
+//Event Handler
+let currentAccount;
+
+btnLogin.addEventListener('click', function (e) {
+  e.preventDefault();
+  //
+  currentAccount = accounts.find(
+    acc => acc.userName === inputLoginUsername.value
+  );
+  console.log(currentAccount);
+  //
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    // console.log('LOGIN');
+    //Display UI and Message
+    labelWelcome.textContent = `Welcome Back, ${
+      currentAccount.owner.split(' ')[0]
+    }`;
+    containerApp.style.opacity = 100;
+
+    //clear input fields
+    inputLoginUsername = inputLoginPin.value = '';
+    inputLoginPin.blur();
+
+    //Display Movements
+    displayMovements(currentAccount.movements);
+    //Display Balance
+    calcDisplayBalance(currentAccount.movements);
+    //Display Summary
+    calcDisplaySummary(currentAccount);
+  }
+});
 
 ///////////////////////////////////////
 // Coding Challenge #1
@@ -167,9 +196,6 @@ function checkDogs(dogJulia, dogsKate) {
 }
 checkDogs([3, 5, 2, 12, 7], [4, 1, 15, 8, 3]);
 */
-
-
-
 ///////////////////////////////////////
 // Coding Challenge #2
 
@@ -181,12 +207,49 @@ Create a function 'calcAverageHumanAge', which accepts an arrays of dog's ages (
 and does the following things in order:
 
 1. Calculate the dog age in human years using the following formula: if the dog is <= 2 years old,
- humanAge = 2 * dogAge. If the dog is > 2 years old, humanAge = 16 + dogAge * 4.
+humanAge = 2 * dogAge. If the dog is > 2 years old, humanAge = 16 + dogAge * 4.
 2. Exclude all dogs that are less than 18 human years old 
 (which is the same as keeping dogs that are at least 18 years old)
 3. Calculate the average human age of all adult dogs 
 (you should already know from other challenges how we calculate averages 😉)
 4. Run the function for both test datasets
+
+TEST DATA 1: [5, 2, 4, 1, 15, 8, 3]
+TEST DATA 2: [16, 6, 10, 5, 6, 1, 4]
+
+GOOD LUCK 😀
+
+let humanAge, avg;
+const calcAverageHumanAge = function (age) {
+  const humanAgeArr = age.map((dogAge, i, arr) => {
+    dogAge <= 2 ? (humanAge = 2 * dogAge) : (humanAge = 16 + dogAge * 4).filter(age=>age>=18)
+    return humanAge;
+  });
+  console.log(humanAgeArr);
+  avg =
+    humanAgeArr.reduce((acc, curr, i, arr) => acc + curr, 0) /
+    humanAgeArr.length;
+  console.log(avg);
+
+  //avg
+  //2,3  (2+3)/2===2/2+2/3=2.5
+};
+calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
+calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]);
+*/
+
+///////////////////////////////////////
+// Coding Challenge #3
+
+const calcAverageHumanAge = ages => {
+  ages
+    .map(dogAge => (dogAge <= 2 ? 2 * dogAge : 16 + dogAge * 4))
+    .reduce((acc, curr, i, arr) => acc + curr / arr.length, 0);
+};
+
+/* 
+Rewrite the 'calcAverageHumanAge' function from the previous challenge,
+ but this time as an arrow function, and using chaining!
 
 TEST DATA 1: [5, 2, 4, 1, 15, 8, 3]
 TEST DATA 2: [16, 6, 10, 5, 6, 1, 4]
@@ -392,7 +455,6 @@ for (const mov of movements) {
 }
 console.log(sum);
 
-*/
 
 //CHAINING METHOD
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
@@ -407,3 +469,22 @@ const totalDespositedUSD = movements
   })
   .reduce((acc, ele, i, arr) => acc + ele);
 // console.log(totalDespositedUSD);
+
+
+///++++++++++++++++THE FIND METHOD++++++++++++++++++++
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+//returns the element(not array) which encounter first in the given array
+const firstWithdrawal = movements.find(mov => mov < 0);
+console.log(movements);
+console.log(firstWithdrawal);
+console.log(accounts);
+const accountJes = accounts.find(acc => acc.owner === 'Jessica Davis');
+console.log(accountJes);
+
+for (const acc of accounts) {
+  const jess = acc.owner === 'Jessica Davis' ? acc : '';
+  console.log(jess);
+}
+
+*/
