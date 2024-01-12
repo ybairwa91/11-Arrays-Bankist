@@ -87,16 +87,15 @@ const displayMovements = function (movements) {
           <div class="movements__value">${mov}</div>
         </div>
       `;
-
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
 
 //Displaybalance
-const calcDisplayBalance = function (movements) {
-  const balance = movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${balance} £`;
-  console.log(balance);
+const calcDisplayBalance = function (acc) {
+  acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
+
+  labelBalance.textContent = `${acc.balance} £`;
 };
 
 //displaySummary
@@ -144,9 +143,25 @@ btnLogin.addEventListener('click', function (e) {
     //Display Movements
     displayMovements(currentAccount.movements);
     //Display Balance
-    calcDisplayBalance(currentAccount.movements);
+    calcDisplayBalance(currentAccount);
     //Display Summary
     calcDisplaySummary(currentAccount);
+  }
+});
+//
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault();
+  const amount = Number(inputTransferAmount.value);
+  const receiverAcc = accounts.find(
+    acc => acc.userName === inputTransferTo.value
+  );
+  console.log(amount, receiverAcc);
+  if (
+    amount > 0 &&
+    currentAccount.balance >= amount &&
+    receiverAcc?.userName !== currentAccount.userName
+  ) {
+    console.log('Transfer Valid');
   }
 });
 
