@@ -74,9 +74,11 @@ const createUserNames = function (accs) {
 createUserNames(accounts);
 
 //adding html text dynamically using html
-const displayMovements = function (movements) {
+const displayMovements = function (movements, sort = false) {
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
   containerMovements.innerHTML = '';
-  movements.forEach(function (mov, index) {
+  movs.forEach(function (mov, index) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
     const html = `
     <div class="movements__row">
@@ -195,6 +197,13 @@ btnLoan.addEventListener('click', function (e) {
     }
     inputLoanAmount.value = inputTransferTo.value = '';
   }
+});
+//sortbtn
+let sorted = false;
+btnSort.addEventListener('click', e => {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
 });
 
 //closeBtn
@@ -560,7 +569,8 @@ for (const acc of accounts) {
 
 */
 
-///+++++++++++++SOME METHOD+++++++++++
+/*
+///+++++++++++++SOME AND EVERY METHOD+++++++++++
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 //EQUALITY
@@ -571,5 +581,82 @@ console.log(movements.some(mov => mov === 3000));
 const anyDeposits = movements.some(mov => mov > 1500);
 console.log(anyDeposits);
 
-//+++++++++++++++++++EVERY++++++++++++++
+///+++++++++++++++++++EVERY++++++++++++++
 console.log(movements.every(mov => mov > 0));
+console.log(account4.movements.every(mov => mov > 0));
+
+//seperate callback
+const deposit = mov => mov > 0;
+console.log(movements.some(deposit));
+console.log(movements.every(deposit));
+console.log(movements.filter(deposit));
+
+///+++++++++++++FLAT AND FLATMAP++++++++++
+
+const arr = [[1, 2, 3], [4, 5, 6], 7, 8];
+console.log(arr.flat());
+
+const arrDeep = [[[1, 2], 3], [4, [5, 6]], 7, 8];
+console.log(arrDeep.flat(1));
+console.log(arrDeep.flat(2));
+console.log(arrDeep.flat(3));
+console.log(arrDeep.flat(4));
+console.log(arrDeep.flat().flat());
+
+const overallBalance1 = accounts
+  .map(acc => acc.movements)
+  .flat()
+  .reduce((accu, curr) => accu + curr);
+console.log(overallBalance1);
+
+///+++++++++++FLATMAP++++++++++++++++
+const overallBalance2 = accounts
+  .map(acc => acc.movements)
+  .flatMap(acc => acc.movements)
+  .reduce((accu, curr) => accu + curr);
+// console.log(overallBalance2);
+
+///+++++++++++SORTING ARRAY++++++++++++
+//Strings
+const owners = ['Jonas', 'Zach', 'Adam', 'Martha'];
+console.log(owners.sort());
+
+//Numbers
+console.log(movements);
+// console.log(movements.sort());
+
+//return<0,A,B (Keep order)
+//return>0,B,A (switch order)
+movements.sort((a, b) => a - b);
+
+movements.sort((a, b) => b - a);
+
+///+++++++++++++++++++Create array+++++++++++++
+const arra = [1, 2, 3, 4, 5, 6, 7];
+console.log(new Array([1, 2, 3, 4, 5, 6, 7]));
+
+//generate array programmatically
+const x = new Array(7);
+console.log(x);
+console.log(x.map(() => 5));
+
+//fill method(change underlying values)
+// x.fill(1)
+x.fill(1, 3, 5);
+console.log(x);
+
+arra.fill(23, 2, 6);
+console.log(arra);
+
+//Array.from() method
+const y = Array.from({ length: 7 }, () => 1);
+console.log(y);
+const z = Array.from({ length: 7 }, (_, i) => i + 1);
+console.log(z);
+
+// const dice = Array.from(
+//   { length: 100 },
+//   () => Math.floor(Math.random() * 6) + 1
+// );
+// console.log(dice);
+*/
